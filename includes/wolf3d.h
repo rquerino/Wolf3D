@@ -6,7 +6,7 @@
 /*   By: rquerino <rquerino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/05 13:54:54 by rquerino          #+#    #+#             */
-/*   Updated: 2020/02/05 15:14:25 by rquerino         ###   ########.fr       */
+/*   Updated: 2020/02/13 13:50:41 by rquerino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,13 @@
 # include <unistd.h>
 # include <math.h>
 
-# define WIDTH	640
-# define HEIGHT	480
-# define LEFT	123
-# define RIGHT	124
-# define DOWN	125
-# define UP		126
-# define ESC	53
+# define WIDTH		640
+# define HEIGHT		480
+# define LEFT		123
+# define RIGHT		124
+# define DOWN		125
+# define UP			126
+# define ESC		53
 
 typedef struct	s_wolf
 {
@@ -33,9 +33,14 @@ typedef struct	s_wolf
 	void		*win;
 	void		*img_ptr;
 	uint32_t	*img;
-	int			player_x;
-	int			player_y;
-	int			direction;
+	double		pos_x;
+	double		pos_y;
+	double		dir_x;
+	double		dir_y;
+	double		plane_x;
+	double		plane_y;
+	double		time;
+	double		old_time;
 	int			mapsize_x;
 	int			mapsize_y;
 	int			**map;
