@@ -6,74 +6,34 @@
 /*   By: rquerino <rquerino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 16:38:50 by rquerino          #+#    #+#             */
-/*   Updated: 2020/02/17 12:43:54 by rquerino         ###   ########.fr       */
+/*   Updated: 2020/02/17 14:08:43 by rquerino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/wolf3d.h"
 
 /*
-** Raycasting run in constant time, so you can use a massive world and the
-** performance will be the same as a tiny one.
+** Functions to handle keyboard, mouse position and scroll
 */
 
-void	ft_getfirstpos(t_wolf *w)
+int		ft_funcs(int key, t_wolf *w)
 {
-	int	x;
-	int	y;
-
-	x = 0;
-	y = 0;
-	while (w->map[y][x] != 0)
-		while (y < w->mapsize_y)
-		{
-			x = 0;
-			while (x < w->mapsize_x)
-				x++;
-			y++;
-		}
-	w->pos_x = x;
-	w->pos_y = y;
-}
-
-void	ft_init_struct(int fd, t_wolf *w)
-{
-	w = malloc(sizeof(t_wolf));
-	ft_readmap(fd, w);
-	ft_getfirstpos(w);
+	if (key == UP)
+		w->pos_x += 1;
+	else if (key == DOWN)
+		w->pos_x -= 1;
+	else if (key == RIGHT)
+		w->dir_x += 1;
+	else if (key == LEFT)
+		w->dir_x -= 1;
+	else if (key == ESC)
+		ft_free_all(w);
+	return (0);
 }
 
 /*
-** Function that reads the map and stores its information in a 2D array.
-** Also stores its size.
+** Initialize environment and hook the loop functions
 */
-
-void	ft_readmap(int fd, t_wolf *w)
-{
-	char	*buff;
-	int		x;
-	int		y;
-	int		i;
-
-	y = 0;
-	while (get_next_line(fd, &buff) > 0)
-	{
-		x = 0;
-		i = 0;
-		while (i < ft_strlen(buff))
-		{
-			if (buff[i] >= '0' && buff[i] <= '9')
-			{
-				w->map[y][x] = buff[i] - '0';
-				x++;
-			}
-			i++;
-		}
-		y++;
-	}
-	w->mapsize_x = i + 1;
-	w->mapsize_y = y + 1;
-}
 
 void	ft_init_env(t_wolf *w)
 {
@@ -86,10 +46,8 @@ void	ft_init_env(t_wolf *w)
 	w->img_ptr = mlx_new_image(w->mlx, WIDTH, HEIGHT);
 	w->img = (uint32_t*)mlx_get_data_addr(w->img_ptr,
 		&bpp, &size, &endian);
-	// mlx_hook(w->win, 2, 0, ft_funcs, w);
-	// mlx_hook(w->win, 4, 0, ft_scroll, w);
-	// mlx_hook(w->win, 6, 0, ft_movement, w);
-	// mlx_loop_hook(w->mlx, ft_draw_julia, w);
+	mlx_hook(w->win, 2, 0, ft_funcs, w);
+	mlx_loop_hook(w->mlx, ft_draw, w);
 	mlx_loop(w->mlx);
 }
 
